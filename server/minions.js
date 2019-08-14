@@ -25,8 +25,13 @@ minionsRouter.get('/:minionId', (req, res, next) => {
   res.send(req.foundMinion);
 });
 
+// Update a minion
+minionsRouter.put('/:minionId', (req, res, next) => {
+  const updatedMinion = db.updateInstanceInDatabase('minions', req.body);
+  if (updatedMinion) {
+    res.send(updatedMinion);
   } else {
-    res.status(404).send();
+    res.status(400).send();
   }
 });
 

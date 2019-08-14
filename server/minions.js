@@ -20,6 +20,16 @@ minionsRouter.get('/', (req, res, next) => {
   res.send(minions);
 });
 
+// POST
+minionsRouter.post('/', (req, res, next) => {
+  if (req.body.name) {
+    const newMinion = db.addToDatabase('minions', req.body);
+    res.status(201).send(newMinion);
+  } else {
+    res.status(400).send();
+  }
+});
+
 // GET a specific minion
 minionsRouter.get('/:minionId', (req, res, next) => {
   res.send(req.foundMinion);

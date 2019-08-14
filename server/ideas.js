@@ -2,8 +2,10 @@ const express = require('express');
 const ideasRouter = express.Router();
 
 const db = require('./db.js');
+const checkMillionDollarIdea = require('./checkMillionDollarIdea.js');
 
-// Check if the requested minion exists
+
+// Check if the requested idea exists
 ideasRouter.use('/:ideaId', (req, res, next) => {
   const foundIdea = db.getFromDatabaseById('ideas', req.params.ideaId);
   if (!foundIdea) {
@@ -21,7 +23,7 @@ ideasRouter.get('/', (req, res, next) => {
 });
 
 // POST
-ideasRouter.post('/', (req, res, next) => {
+ideasRouter.post('/', checkMillionDollarIdea, (req, res, next) => {
   if (req.body.name) {
     const newIdea = db.addToDatabase('ideas', req.body);
     res.status(201).send(newIdea);
@@ -36,7 +38,7 @@ ideasRouter.get('/:ideaId', (req, res, next) => {
 });
 
 // Update a minion
-ideasRouter.put('/:ideaId', (req, res, next) => {
+ideasRouter.put('/:ideaId', checkMillionDollarIdea, (req, res, next) => {
   const updatedIdea = db.updateInstanceInDatabase('ideas', req.body);
   if (updatedIdea) {
     res.send(updatedIdea);

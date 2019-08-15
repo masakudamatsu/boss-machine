@@ -13,6 +13,17 @@ minionsRouter.use('/:minionId', (req, res, next) => {
     next();
   }
 });
+// Check if the requested work exists
+minionsRouter.use('/:minionId/work/:workId', (req, res, next) => {
+  const foundWork = db.getFromDatabaseById('work', req.params.workId);
+  if (!foundWork) {
+    res.status(404).send();
+  } else {
+    req.foundWork = foundWork;
+    next();
+  }
+});
+
 
 // GET all
 minionsRouter.get('/', (req, res, next) => {
@@ -72,6 +83,27 @@ minionsRouter.post('/:minionId/work', (req, res, next) => {
     res.status(201).send(newWork);
   } else {
     res.status(400).send();
+  }
+});
+
+minionsRouter.put('/:minionId/work/:workId', (req, res, next) => {
+  if (req.params.minionId !== req.body.minionId) {
+    res.status(400).send();
+  }
+  const updatedWork = db.updateInstanceInDatabase('work', req.body);
+  if (updatedWork) {
+    res.send(updatedWork);
+  } else {
+    res.status(400).send();
+  }
+});
+
+minionsRouter.delete('/:minionId/work/:workId', (req, res, next) => {
+  const deletedSuccessfully = db.deleteFromDatabasebyId('work', req.params.workId);
+  if (deletedSuccessfully) {
+    res.status(204).send();
+  } else {
+    res.status(404).send();
   }
 });
 

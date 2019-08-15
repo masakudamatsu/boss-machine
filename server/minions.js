@@ -54,4 +54,14 @@ minionsRouter.delete('/:minionId', (req, res, next) => {
   }
 });
 
+// Work
+minionsRouter.post('/:minionId/work', (req, res, next) => {
+  if (req.body.title) {
+    const newWork = db.addToDatabase('work', req.body);
+    res.status(201).send(newWork);
+  } else {
+    res.status(400).send();
+  }
+});
+
 module.exports = minionsRouter;

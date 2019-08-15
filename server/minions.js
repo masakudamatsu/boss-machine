@@ -55,6 +55,17 @@ minionsRouter.delete('/:minionId', (req, res, next) => {
 });
 
 // Work
+minionsRouter.get('/:minionId/work', (req, res, next) => {
+  const workDatabase = db.findDataArrayByName('work');
+  if (workDatabase === null) {
+      return null;
+    }
+  const work = workDatabase.data.filter((element) => {
+    return element.minionId === req.params.minionId;
+    });
+  res.send(work);
+});
+
 minionsRouter.post('/:minionId/work', (req, res, next) => {
   if (req.body.title) {
     const newWork = db.addToDatabase('work', req.body);
